@@ -1,0 +1,10 @@
+\contentsline {section}{\numberline {1}The Heat Equation}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Separation of Variables}{2}{subsection.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.1}What can $k$ be?}{3}{subsubsection.1.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.2}Finding $T(t)$}{4}{subsubsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.2}Constructing the General Solution}{4}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Fourier Series}{6}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Fourier Series}{6}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Why are they a basis?}{6}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Orthogonality Proof}{7}{subsubsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.2}Finding the Coefficients}{8}{subsection.2.2}%

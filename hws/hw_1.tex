@@ -1,0 +1,311 @@
+\documentclass[12pt]{article}
+\input{../math_setup}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Partial Differential Equations -- Homework 1}
+\lhead{Marc DeCarlo}
+\cfoot{\thepage}
+
+\title{Partial Differential Equations -- Homework 1}
+\author{Marc DeCarlo}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\prob{1}
+Suggest a linear second-order PDE in $x$ and $y$, which is elliptic in the disk $x^2 + y^2 < 1$ and only there. Determine the regions where your equation is parabolic and the regions where your equation is hyperbolic.
+
+\sol
+The way to determine the type of a second-order PDE is to look at the discriminant of the equation. For a general second-order PDE of the form
+\[
+A u_{xx} + B u_{xy} + C u_{yy} + \text{(lower order terms)} = 0
+\]
+The discriminant is given by with the following cases:
+\[
+\begin{cases}
+\text{elliptic} & \text{if } B^2 - 4AC < 0, \\
+\text{parabolic} & \text{if } B^2 - 4AC = 0, \\
+\text{hyperbolic} & \text{if } B^2 - 4AC > 0.
+\end{cases}
+\]
+If we want the equation to be elliptic in the disk $x^2 + y^2 < 1$ and only there, a good starting place would be to consider the expression
+\[
+x^2 + y^2 < 1 \implies x^2 + y^2 - 1 < 0
+\]
+This is in the same elliptical form as the discriminant, so we can use this to construct our PDE. At this point there are many valid choices for the PDE, but one simple choice is
+\begin{align*}
+    A &= \tup{-y^2+1} \\
+    B &= x^2 \\
+    C &= \frac{1}{4}
+\end{align*}
+This gives us the PDE
+\[
+\tup{-y^2+1} u_{xx} + x^2 u_{xy} + \frac{1}{4} u_{yy} = 0
+\]
+When considering when the PDE is parabolic or hyperbolic, it might be a good idea to plot the unit circle in the $xy$-plane.
+\begin{center}
+\begin{tikzpicture}[scale=2]
+
+    % Hyperbolic region shading (outside disk, clipped to axis extent)
+    \begin{scope}
+        \clip (-1.5,-1.5) rectangle (1.5,1.5);
+        \fill[gray!35] (-1.5,-1.5) rectangle (1.5,1.5);
+        \fill[gray!10] (0,0) circle (1);
+    \end{scope}
+
+    % Unit circle (parabolic boundary)
+    \draw[thick] (0,0) circle (1);
+
+    % Axes
+    \draw[->] (-1.6,0) -- (1.6,0) node[right] {$x$};
+    \draw[->] (0,-1.6) -- (0,1.6) node[above] {$y$};
+
+    % Tick marks at ±1
+    \draw (1, 0.04) -- (1,-0.04) node[below] {$1$};
+    \draw (-1, 0.04) -- (-1,-0.04) node[below] {$-1$};
+    \draw (0.04, 1) -- (-0.04, 1) node[left] {$1$};
+    \draw (0.04,-1) -- (-0.04,-1) node[left] {$-1$};
+
+    % Region labels
+    \node at (0.4, 0.4) {\textit{elliptic}};
+    \node at (1, 1) {\textit{hyperbolic}};
+    \node at (1.05,-1) {\textit{parabolic}};
+
+    % Arrow from "para" label pointing to circle boundary
+    \draw[->] (0.86,-0.9) -- ({cos(-50)*1.0},{sin(-50)*1.0});
+
+\end{tikzpicture}
+\end{center}
+
+
+\prob{2}
+Suppose that the rod has a constant internal heat source and the equation describing the heat flow within the rod is
+\[
+u_t = u_{xx} + 3, \quad 0 < x < 1.
+\]
+Let the imposed boundary conditions be $u(0,t) = u(1,t) = 3$, $t > 0$. Find the limiting temperature profile as $t \to \infty$.
+
+\sol
+To find the limiting temperature profile as $t \to \infty$, we can look for a steady-state solution to the PDE. A steady-state solution is one that does not change with time, which means that $u_t = 0$. Substituting this into the PDE gives us:
+\[
+0 = u_{xx} + 3
+\implies u_{xx} = -3
+\]
+Integrating this equation twice with respect to $x$, we get:
+\[
+u_x = -3x + C_1
+\]
+\[
+u = -\frac{3}{2}x^2 + C_1 x + C_2
+\]
+Now we can apply the boundary conditions to find the constants $C_1$ and $C_2$. Using $u(0,t) = 3$, we get:
+\[
+u(0) = C_2 = 3
+\]
+Using $u(1,t) = 3$, we get:
+\[
+u(1) = -\frac{3}{2} + C_1 + 3 = 3 \implies C_1 = \frac{3}{2}
+\]
+Thus, the limiting temperature profile as $t \to \infty$ is given by:
+\[
+\boxed{
+u(x) = -\frac{3}{2}x^2 + \frac{3}{2}x + 3}
+\]
+
+
+
+\prob{3}
+Let $u(x,t)$ be the solution to the heat equation $u_t = u_{xx}$ with the boundary conditions $u_x(0,t) = u_x(L,t) = 0$, $t > 0$. Show that the mean temperature
+\[
+\frac{1}{L} \int_0^L u(x,t)\, dx
+\]
+does not change with time.
+
+\sol
+To show that the mean temperature does not change with time, we can compute the time derivative of the mean temperature and show that it is zero. The mean temperature is given by
+\[
+M(t) = \frac{1}{L} \int_0^L u(x,t)\, dx
+\]
+Taking the time derivative, we have
+\[
+\diff{}{t}M(t) = \diff{}{t} \tup{ \frac{1}{L} \int_0^L u(x,t)\, dx } 
+\]
+On the right-hand side, we can bring the differential operator inside the integral since it is with respect to $t$ and the integral is with respect to $x$, (This is because of Leibniz's rule, really advanced analysis topic). This gives us:
+\[
+\diff{}{t}M(t) = \frac{1}{L} \int_0^L \diff{}{t} u(x,t)\, dx
+\]
+Using the heat equation $u_t = u_{xx}$, we can replace $\diff{}{t} u(x,t)$ with $u_{xx}(x,t)$:
+\[
+\diff{}{t}M(t) = \frac{1}{L} \int_0^L u_{xx}(x,t)\, dx
+\]
+Applying the boundary conditions $u_x(0,t) = u_x(L,t) = 0$, we get
+\[
+\diff{}{t}M(t) = \frac{1}{L} \left[ u_x(x,t) \right]_0^L = \frac{1}{L} (u_x(L,t) - u_x(0,t)) = 0
+\]
+Hence, the mean temperature does not change with time.$\qed$
+
+\prob{4}
+Find the solution to the heat flow problem
+\[
+\begin{cases}
+u_t = u_{xx}, & 0 < x < 1,\ t > 0, \\
+u(0,t) = u(1,t) = 0, \\
+u(x,0) = \sin(\pi x) + 0.3\sin(2\pi x).
+\end{cases}
+\]
+Consider the hot spot (the point on the rod where the temperature $u$ is a maximum). How does the hot spot evolve as $t$ increases? Explain your answer.
+
+\sol
+This is a standard heat equation problem which can be solved using separation of variables. I will show the detailed steps to solve this problem, even though they are similar to previous problems.
+\[
+u(x,t) = X(x)T(t)
+\]
+\[
+\implies X(x)T'(t) = X''(x)T(t)
+\]
+\[
+\implies \frac{T'(t)}{T(t)} = \frac{X''(x)}{X(x)} = -\lambda^2, \qquad \lambda \in \ZZ
+\]
+\[
+\implies 
+\begin{cases}
+X''(x) + \lambda^2 X(x) = 0, \\
+T'(t) + \lambda^2 T(t) = 0
+\end{cases}
+\]
+Solving $X(x)$:
+\[
+X''(x) + \lambda^2 X(x) = 0
+\implies r^2 + \lambda^2 = 0
+\implies r = \pm i\lambda
+\implies X(x) = A\cos(\lambda x) + B\sin(\lambda x)
+\]
+Applying the boundary conditions $u(0,t) = u(1,t) = 0$, we get
+\[
+X(0) = A \cos(0) + B \sin(0) = A = 0
+\]
+\[
+X(1) = B \sin(\lambda) = 0 \implies \lambda = n\pi, \quad n \in \ZZ
+\]
+Solving $T(t)$:
+\[
+T'(t) + \lambda^2 T(t) = 0
+\implies T(t) = Ce^{-\lambda^2 t}
+\]
+Hence, the solution is
+\[
+X_n(x) = B_n \sin(n\pi x), \quad T_n(t) = e^{-(n\pi)^2 t}
+\]
+\[
+u(x,t) = \sum_{n=1}^{\infty} B_n \sin(n\pi x) e^{-(n\pi)^2 t}
+\]
+Since $X(x)$ only consists of sine terms, we can use the Fourier sine series to find the coefficients $B_n$:
+\[
+B_n = 2 \int_0^1 u(x,0) \sin(n\pi x)\, dx
+\]
+Important to note that the Fourier Sine series, when doing this integral we only need to consider the sine terms that have the same frequency as the initial condition, since the sine functions are orthogonal. This means that when we compute the integral for $B_n$, we will get zero for all $n$ except for $n=1$ and $n=2$.
+Using the initial condition $u(x,0) = \sin(\pi x) + 0.3\sin(2\pi x)$, we get
+\[
+\begin{cases}
+B_1 = 2 \int_0^1 (\sin(\pi x) + 0.3\sin(2\pi x)) \sin(\pi x)\, dx = 1, \\
+B_2 = 2 \int_0^1 (\sin(\pi x) + 0.3\sin(2\pi x)) \sin(2\pi x)\, dx = 0.3, \\
+\end{cases}
+\]
+\[
+\implies 
+\boxed{
+u(x,t) = \sin(\pi x) e^{-(\pi)^2 t} + 0.3\sin(2\pi x) e^{-4(\pi)^2 t}
+}
+\]
+To find the hot spot, we need to find the maximum of $u(x,t)$ with respect to $x$ for each fixed $t$. We can do this by taking the derivative of $u(x,t)$ with respect to $x$ and setting it equal to zero:
+\[
+\diff{}{x} u(x,t) = \pi \cos(\pi x) e^{-(\pi)^2 t} + 0.6\pi \cos(2\pi x) e^{-4(\pi)^2 t} = 0
+\]
+This is a transcendental equation and does not have a closed-form solution, but we can analyze the behavior of the hot spot as $t$ increases. As $t$ increases, the exponential terms $e^{-(\pi)^2 t}$ and $e^{-4(\pi)^2 t}$ decay to zero. However, the term with $n=1$ (the $\sin(\pi x)$ term) decays slower than the term with $n=2$ (the $\sin(2\pi x)$ term) because it has a smaller exponent in the exponential. This means that as $t$ increases, the hot spot will be dominated by the $\sin(\pi x)$ term, which has its maximum at $x = 0.5$. Therefore, as $t$ increases, the hot spot will move towards $x = 0.5$ and eventually stabilize there as the other terms decay away.$\qed$
+
+
+\prob{5}
+Solve the initial boundary value problem
+\[
+\begin{cases}
+u_t = u_{xx}, & 0 < x < 1,\ t > 0, \\
+u_x(0,t) = u_x(1,t) = 0, \\
+u(x,0) = 0.5 - 0.5\cos(2\pi x)
+\end{cases}
+\]
+by separation of variables. Include all steps.
+
+\sol
+We will solve this problem using separation of variables. We assume a solution of the form:
+\[
+u(x,t) = X(x)T(t)
+\]
+Substituting this into the PDE, we get:
+\[
+X(x)T'(t) = X''(x)T(t)
+\implies \frac{T'(t)}{T(t)} = \frac{X''(x)}{X(x)} = -\lambda^2, \quad \lambda \in \ZZ
+\]
+\[
+\implies
+\begin{cases}
+X''(x) + \lambda^2 X(x) = 0, \\
+T'(t) + \lambda^2 T(t) = 0
+\end{cases}
+\]
+Solving for $X(x)$:
+\[
+X''(x) + \lambda^2 X(x) = 0
+\implies r^2 + \lambda^2 = 0
+\implies r = \pm i\lambda
+\implies X(x) = A\cos(\lambda x) + B\sin(\lambda x)
+\]
+Applying the boundary conditions $u_x(0,t) = u_x(1,t) = 0$, we get:
+\[
+u_x(x,t) = X'(x)T(t) = (-A\lambda \sin(\lambda x) + B\lambda \cos(\lambda x))T(t)
+\]
+\[
+u_x(0,t) = B\lambda T(t) = 0 \implies B = 0
+\]
+\[
+u_x(1,t) = -A\lambda \sin(\lambda) T(t) = 0 \implies \sin(\lambda) = 0 \implies \lambda = n\pi, \quad n \in \ZZ
+\]
+\[
+\implies X_n(x) = A_n \cos(n\pi x)
+\]
+Solving for $T(t)$:
+\[
+T'(t) + \lambda^2 T(t) = 0
+\implies T(t) = Ce^{-\lambda^2 t}
+\]
+Hence, the solution is:
+\[
+u(x,t) = \frac{A_0}{2} + \sum_{n=1}^{\infty} A_n \cos(n\pi x) e^{-(n\pi)^2 t}
+\]
+To find the coefficients $A_n$, we can use the Fourier cosine series since our spatial part consists of cosine functions. The coefficients are given by:
+\[
+A_n = 2 \int_0^1 u(x,0) \cos(n\pi x)\, dx
+\]
+Using the initial condition $u(x,0) = 0.5 - 0.5\cos(2\pi x)$, we can compute the coefficients:
+\[
+A_0 = 2 \int_0^1 (0.5 - 0.5\cos(2\pi x))\, dx = 1
+\]
+For $n=2$:
+\[
+A_2 = 2 \int_0^1 (0.5 - 0.5\cos(2\pi x)) \cos(2\pi x)\, dx = -0.5
+\]
+For $n \neq 0, 2$:
+\[
+A_n = 2 \int_0^1 (0.5 - 0.5\cos(2\pi x)) \cos(n\pi x)\, dx = 0
+\]
+Thus, the solution to the initial boundary value problem is:
+\[
+\boxed{
+u(x,t) = \frac{1}{2} - \frac{1}{2} \cos(2\pi x) e^{-4(\pi)^2 t}
+}
+\]
+
+
+\end{document}

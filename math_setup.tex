@@ -1,0 +1,178 @@
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{fancyhdr}
+% \usepackage[breaklinks=True]{hyperref}
+\usepackage[bookmarks]{hyperref}
+\usepackage{tikz}
+\usepackage{hyperxmp}
+\usepackage{enumitem}
+\usetikzlibrary{calc}
+
+\newcommand{\PP}{\mathbb{P}} % polynomials
+\newcommand{\CC}{\mathbb{C}} % complex numbers
+\newcommand{\RR}{\mathbb{R}} % real numbers
+\newcommand{\QQ}{\mathbb{Q}} % rational numbers
+\newcommand{\NN}{\mathbb{N}} % nonnegative integers
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\Z}[1]{\mathbb{Z}/#1\mathbb{Z}} % integers modulo k
+                                            % (syntax: "\Z{k}")
+\newcommand{\ZZ}{\mathbb{Z}} % integers
+\newcommand{\id}{\operatorname{id}} % identity map
+\newcommand{\lcm}{\operatorname{lcm}}
+% Lowest common multiple. For historical reasons, LaTeX has a \gcd
+% command built in, but not an \lcm command. The preceding line
+% rectifies that.
+\newcommand{\diag}{\operatorname{diag}} % diagonal matrix
+\newcommand{\ord}{\operatorname{ord}} % order of a group element
+\newcommand{\rank}{\operatorname{rank}} % rank of a matrix
+\newcommand{\Hom}{\operatorname{Hom}} % group of homomorphisms
+\newcommand{\End}{\operatorname{End}} % ring of endomorphisms
+\newcommand{\Iso}{\operatorname{Iso}} % set of isomorphisms
+\newcommand{\GL}{\operatorname{GL}} % general linear group
+\newcommand{\SL}{\operatorname{SL}} % special linear group
+\newcommand{\Nil}{\operatorname{Nil}} % nilradical
+\newcommand{\Jac}{\operatorname{Jac}} % Jacobson radical
+\newcommand{\Tor}{\operatorname{Tor}} % torsion submodule or Tor functor
+\newcommand{\Ext}{\operatorname{Ext}} % Ext functor
+\newcommand{\Ker}{\operatorname{Ker}} % kernel
+\newcommand{\Coker}{\operatorname{Coker}} % cokernel
+\newcommand{\symd}{\mathbin{\bigtriangleup}} % symmetric difference of sets
+\newcommand{\powset}[2][]{\ifthenelse{\equal{#2}{}}{\mathcal{P}\left(#1\right)}{\mathcal{P}_{#1}\left(#2\right)}}
+% $\powset[k]{S}$ stands for the set of all $k$-element subsets of
+% $S$. The argument $k$ is optional, and if not provided, the result
+% is the whole powerset of $S$.
+\newcommand{\set}[1]{\left\{ #1 \right\}}
+% $\set{...}$ compiles to {...} (set-brackets).
+\newcommand{\seq}[1]{\left\{ #1 \right\}}
+% $\seq{...}$ compiles to {...} (seq-brackets).
+\newcommand{\abs}[1]{\left| #1 \right|}
+% $\abs{...}$ compiles to |...| (absolute value, or size of a set).
+\newcommand{\tup}[1]{\left( #1 \right)}
+% $\tup{...}$ compiles to (...) (parentheses, or tuple-brackets).
+\newcommand{\ive}[1]{\left[ #1 \right]}
+% $\ive{...}$ compiles to [...] (Iverson bracket, aka truth value).
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+% $\floor{...}$ compiles to |_..._| (floor function).
+\newcommand{\underbrack}[2]{\underbrace{#1}_{\substack{#2}}}
+% $\underbrack{...1}{...2}$ yields
+% $\underbrace{...1}_{\substack{...2}}$. This is useful for doing
+% local rewriting transformations on mathematical expressions with
+% justifications. For example, try this out:
+% $ \underbrack{(a+b)^2}{= a^2 + 2ab + b^2 \\ \text{(by the binomial formula)}} $
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+\newcommand{\nnn}{\nonumber\\} % Don't number this line in an "align" environment, and move on to the next line.
+\newcommand{\explain}[1]{\tup{\hspace{-0.5pc}\text{\begin{tabular}{c}#1\end{tabular}\hspace{-0.5pc}}}}
+% $\explain{...}$ interprets the "..." as text (you can
+% nest some math inside by putting it in $...$'s as you
+% would in any other text block) and puts it in parentheses.
+
+% Arrows for normal use:
+\newcommand{\mono}{\hookrightarrow} % Monomorphism/injection.
+\newcommand{\epi}{\twoheadrightarrow} % Epimorphism/surjection.
+\newcommand{\iso}{\overset{\cong}{\to}} % Epimorphism/surjection.
+
+% Arrows for xymatrix:
+\newcommand{\arinj}{\ar@{_{(}->}} % Monomorphism.
+\newcommand{\arinjrev}{\ar@{^{(}->}} % Monomorphism.
+\newcommand{\arsurj}{\ar@{->>}} % Epimorphism.
+\newcommand{\arelem}{\ar@{|->}} % Arrow to be used in describing a map on elements.
+\newcommand{\arback}{\ar@{<-}} % Backward arrow.
+
+%----------------------------------------------------------------------------------------
+%	MAKING SUMMATION SIGNS ALWAYS PUT THEIR BOUNDS ABOVE AND BELOW
+%	THE SIGN
+%----------------------------------------------------------------------------------------
+% The following are hacks to ensure that sums (such as
+% $\sum_{k=1}^n k$) always put their bounds (i.e., the $k=1$ and the
+% $n$) underneath and above the sign, as opposed to on its right.
+% Same for products (\prod), set unions (\bigcup) and set
+% intersections (\bigcap). Remove the 8 lines below if you do not want
+% this behavior.
+\let\sumnonlimits\sum
+\let\prodnonlimits\prod
+\let\cupnonlimits\bigcup
+\let\capnonlimits\bigcap
+\let\maxnonlimits\max
+\let\minnonlimits\min
+\let\oldlimits\lim
+\renewcommand{\sum}{\sumnonlimits\limits}
+\renewcommand{\prod}{\prodnonlimits\limits}
+\renewcommand{\bigcup}{\cupnonlimits\limits}
+\renewcommand{\bigcap}{\capnonlimits\limits}
+\renewcommand{\max}{\maxnonlimits\limits}
+\renewcommand{\min}{\minnonlimits\limits}
+\renewcommand{\lim}{\oldlimits\limits}
+
+%----------------------------------------------------------------------------------------
+%	ENVIRONMENTS
+%----------------------------------------------------------------------------------------
+% The incantations below define how theorem environments
+% (\begin{theorem} ... \end{theorem}) and their likes will look like.
+\newtheoremstyle{plainsl}% <name>
+  {8pt plus 2pt minus 4pt}% <Space above>
+  {8pt plus 2pt minus 4pt}% <Space below>
+  {\slshape}% <Body font>
+  {0pt}% <Indent amount>
+  {\bfseries}% <Theorem head font>
+  {.}% <Punctuation after theorem head>
+  {5pt plus 1pt minus 1pt}% <Space after theorem headi>
+  {}% <Theorem head spec (can be left empty, meaning `normal')>
+
+% Environments which make the text inside them slanted:
+\theoremstyle{plainsl}
+  \newtheorem{theorem}{Theorem}[section]
+  \newtheorem{proposition}[theorem]{Proposition}
+  \newtheorem{lemma}[theorem]{Lemma}
+  \newtheorem{corollary}[theorem]{Corollary}
+  \newtheorem{conjecture}[theorem]{Conjecture}
+% Environments that don't:
+\theoremstyle{definition}
+  \newtheorem{definition}[theorem]{Definition}
+  \newtheorem{example}[theorem]{Example}
+  \newtheorem{exercise}[theorem]{Exercise}
+  \newtheorem{examples}[theorem]{Examples}
+  \newtheorem{algorithm}[theorem]{Algorithm}
+  \newtheorem{question}[theorem]{Question}
+ \theoremstyle{remark}
+  \newtheorem{remark}[theorem]{Remark}
+\newenvironment{statement}{\begin{quote}}{\end{quote}}
+\newenvironment{fineprint}{\begin{small}}{\end{small}}
+
+\newcommand{\sol}{\subsection*{Solution}}
+\newcommand{\prob}[1]{\section*{Problem #1}}
+\newcommand{\letterbullet}[1]{\item[\textbf{(#1)}]}
+\newcommand{\compsign}{(*)}
+\newcommand{\diff}[2]{\frac{d#1}{d#2}}
+\newcommand{\ydiff}[1]{\diff{y}{#1}}
+\newcommand{\pdiff}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\eval}[1]{\left. #1 \right\rvert}
+\newcommand{\st}{\;:\;}
+\newcommand{\grad}{\nabla}
+\newcommand{\inv}[1]{#1^{-1}}
+
+
+\newcommand{\eps}{\varepsilon}
+
+\newcommand{\rref}[1]{\xrightarrow{#1}}
+\newcommand{\interchange}{\leftrightarrow}
+
+\newcommand{\inner}[2]{\langle #1, #2 \rangle}
+
+\newcommand{\norm}[1]{\left\| #1 \right\|}
+
+\newcommand{\zero}[1]{\mathbf{0}_{#1}}
+
+\newcommand{\Real}[1]{\operatorname{Re}(#1)}
+
+% the for all symbol pisses me off without a space after it. this fixes it
+\let\oldforall\forall
+\renewcommand{\forall}{\oldforall\;}
+
+% the exists symbol pisses me off without a space after it. this fixes it
+\let\oldexists\exists
+\renewcommand{\exists}{\oldexists\;}
+
+\newcommand{\recall}{\textbf{Recall:} }
+
+\DeclareMathOperator{\proj}{proj}

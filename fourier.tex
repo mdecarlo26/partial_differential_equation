@@ -1,0 +1,110 @@
+\section{Fourier Series}\label{sec.fourier_series}
+
+\recall the general solution to the heat equation \eqref{eqn.heat_eqn_sol}:
+\[
+u(x,t) = \sum_{n=1}^\infty b_n \sin\left(\frac{n \pi x}{L}\right) e^{-a^2 \left(\frac{n \pi}{L}\right)^2 t}
+\]
+
+The goal of this section is to build a method for finding the coefficients $b_n$ in the above solution, given an initial condition. To do this, we will need to introduce the concept of Fourier series, which allows us to express a function as an infinite sum of sines and cosines.
+
+\subsection{Fourier Series}\label{subsec.fourier_series}
+A Fourier series is a way to represent a periodic function as an infinite sum of sines and cosines. For a function $f(x)$ defined on the interval $[0, L]$, the Fourier series is given by:
+\begin{equation*}\label{eqn.fourier_series}
+f(x) = \frac{a_0}{2} + \sum_{n=1}^\infty \left( a_n \cos\left(\frac{n \pi x}{L}\right) + b_n \sin\left(\frac{n \pi x}{L}\right) \right)
+\end{equation*}
+where the coefficients $a_n$ and $b_n$ are given by:
+\begin{equation*}\label{eqn.fourier_a_coeffs}
+a_n = \frac{2}{L} \int_0^L f(x) \cos\left(\frac{n \pi x}{L}\right) dx, \quad n \geq 0
+\end{equation*}
+\begin{equation*}\label{eqn.fourier_b_coeffs}
+b_n = \frac{2}{L} \int_0^L f(x) \sin\left(\frac{n \pi x}{L}\right) dx, \quad n \geq 1
+\end{equation*}
+
+So we want to find the coefficients, $b_n$, of the Fourier basis functions, $\sin\left(\frac{n \pi x}{L}\right)$, to represent $f$ as a sum of sines.
+\subsubsection{Why are they a basis?}\label{subsubsec.fourier_basis}
+To show this properly, we need to review some topics from linear algebra through the following definitions.
+
+\begin{definition}\label{def.lin_indep}
+    A set of functions $\{f_n\}$ is said to be \textbf{linearly independent} if the only way to write the zero function as a linear combination of the $f_n$ is to have all coefficients be zero. In other words, if $\sum_{n} c_n f_n(x) = 0$ for all $x$, then $c_n = 0$ for all $n$.
+\end{definition}
+
+\begin{definition}\label{def.basis}
+    A set of functions $\{f_n\}$ is a \textbf{basis} for a function space if every function in the space can be written as a linear combination of the $f_n$. In other words, for any function $g$ in the space, there exist coefficients $c_n$ such that $g(x) = \sum_{n} c_n f_n(x)$ for all $x$.
+\end{definition}
+
+\begin{definition}\label{def.inner_product}
+    An \textbf{inner product} on a function space is the same as an inner product on a vector space, but instead of vectors, we have functions. In this context, the inner product is often called the \textbf{integral inner product}. For two functions $f$ and $g$, the inner product is defined as:
+    \[
+    \inner{f}{g} = \int_0^L f(x) g(x) dx
+    \]
+    All of the same properties of an inner product hold for this integral inner product, such as linearity, symmetry, and positive-definiteness.
+\end{definition}
+
+\begin{definition}\label{def.orthogonality}
+    Two functions $f$ and $g$ are said to be \textbf{orthogonal} with respect to the inner product if $\inner{f}{g} = 0$. A set of functions $\{f_n\}$ is said to be an \textbf{orthogonal set} if every pair of distinct functions in the set is orthogonal. If, in addition, each function in the set has norm 1 (i.e., $\inner{f_n}{f_n} = 1$), then the set is called an \textbf{orthonormal set}.
+\end{definition}
+
+\begin{lemma}\label{lemma.ortho_implies_lin_indep}
+    An orthogonal set of functions is linearly independent.
+\end{lemma}
+
+With this dump of definitions and the lemma, we can now say that if we can show that the set of functions $\{\sin\left(\frac{n \pi x}{L}\right) \st n \in \NN \}$ is orthogonal with respect to the integral inner product, then we can conclude that they are linearly independent therefore they span some subspace of the function space. 
+
+\subsubsection{Orthogonality Proof}\label{subsubsec.ortho_proof}
+Lets check orthogonality of the sine functions by choosing two distinct functions from the set, say $\sin\left(\frac{m \pi x}{L}\right)$ and $\sin\left(\frac{n \pi x}{L}\right)$.
+\[
+\inner{\sin \tup{\frac{m \pi x}{L}}}{\sin \tup{\frac{n \pi x}{L}}} = \int_0^L \sin \tup{\frac{m \pi x}{L}} \sin \tup{\frac{n \pi x}{L}} dx
+\]
+\recall the trigonometric identity:
+\[
+\sin A \sin B = \frac{1}{2} \tup{\cos(A-B) - \cos(A+B)}
+\]
+\[
+\implies \int_0^L \sin \tup{\frac{m \pi x}{L}} \sin \tup{\frac{n \pi x}{L}} dx = \frac{1}{2} \int_0^L \tup{\cos\left(\frac{(m-n) \pi x}{L}\right) - \cos\left(\frac{(m+n) \pi x}{L}\right)} dx
+\]
+This leads us to two cases: $m =n$, and $m \neq n$.\\
+\textit{Case 1: $m = n$:}
+\[
+\frac{1}{2} \int_0^L \tup{\cos(0) - \cos\left(\frac{2n \pi x}{L}\right)} dx = \frac{1}{2} \int_0^L \tup{1 - \cos\left(\frac{2n \pi x}{L}\right)} dx
+\]
+\[
+= \frac{1}{2} \left[ x - \frac{L}{2n \pi} \sin\left(\frac{2n \pi x}{L}\right) \right]_0^L = \frac{L}{2}
+\]
+which is not zero, so the functions are not orthogonal when $m = n$.\\
+\textit{Case 2: $m \neq n$:}
+\[
+\frac{1}{2} \int_0^L \tup{\cos\left(\frac{(m-n) \pi x}{L}\right) - \cos\left(\frac{(m+n) \pi x}{L}\right)} dx
+\]
+\[
+= \frac{1}{2} \left[ \frac{L}{(m-n) \pi} \sin\left(\frac{(m-n) \pi x}{L}\right) - \frac{L}{(m+n) \pi} \sin\left(\frac{(m+n) \pi x}{L}\right) \right]_0^L 
+\]
+Since $(m+n)$ and $(m-n)$ are both integers, the sine terms will evaluate to zero at both limits of integration, so the entire expression evaluates to zero. Thus,
+\[
+\inner{\sin \tup{\frac{m \pi x}{L}}}{\sin \tup{\frac{n \pi x}{L}}} = 0 \quad \text{for } m \neq n
+\]
+
+\subsection{Finding the Coefficients}\label{subsec.finding_coeffs}
+Now that we have shown that the sine functions are orthogonal, we can use this property to find the coefficients $b_n$ in the Fourier series expansion of $f(x)$. We want to find $b_n$ such that:
+\[
+f(x) = \sum_{n=1}^\infty b_n \sin\left(\frac{n \pi x}{L}\right)
+\]
+To find $b_n$, we can take the inner product of both sides of the equation with $\sin\left(\frac{m \pi x}{L}\right)$ for some integer $m$:
+\[
+\inner{f}{\sin \tup{\frac{m \pi x}{L}}} = \inner{\sum_{n=1}^\infty b_n \sin\left(\frac{n \pi x}{L}\right)}{\sin \tup{\frac{m \pi x}{L}}}
+\]
+Using linearity of the inner product, we can pull the sum and the coefficients out:
+\[
+\inner{f}{\sin \tup{\frac{m \pi x}{L}}} = \sum_{n=1}^\infty b_n \inner{\sin\left(\frac{n \pi x}{L}\right)}{\sin \tup{\frac{m \pi x}{L}}}
+\]
+From the orthogonality proof, we know that $\inner{\sin\left(\frac{n \pi x}{L}\right)}{\sin \tup{\frac{m \pi x}{L}}} = 0$ for $n \neq m$ and $\inner{\sin\left(\frac{n \pi x}{L}\right)}{\sin \tup{\frac{n \pi x}{L}}} = \frac{L}{2}$ for $n = m$. Thus, the only term in the sum that survives is the one where $n = m$, giving us:
+\[
+\inner{f}{\sin \tup{\frac{m \pi x}{L}}} = b_m \inner{\sin\left(\frac{m \pi x}{L}\right)}{\sin \tup{\frac{m \pi x}{L}}} = b_m \frac{L}{2}
+\]
+Solving for $b_m$, we get:
+\[
+b_m = \frac{2}{L} \inner{f}{\sin \tup{\frac{m \pi x}{L}}} = \frac{2}{L} \int_0^L f(x) \sin\left(\frac{m \pi x}{L}\right) dx
+\]
+Thus, we have found the formula for the coefficients $b_n$ in the Fourier series expansion of $f(x)$:
+\[
+b_n = \frac{2}{L} \int_0^L f(x) \sin\left(\frac{n \pi x}{L}\right) dx, \quad n \in \NN
+\]

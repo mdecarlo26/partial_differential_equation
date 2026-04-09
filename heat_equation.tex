@@ -1,0 +1,162 @@
+\section{The Heat Equation} \label{sec.heat_equation}
+The heat equation is a fundamental partial differential equation that describes how heat diffuses through a given region over time. It is given by the following equation:
+\begin{equation}\label{eqn.heat_eqn}
+    u_t = a^2 u_{xx}
+\end{equation}
+This is the one-dimensional heat equation, generally modeling a rod,  where $u(x,t)$ represents the temperature at position $x$ and time $t$, and $a^2$ is the thermal diffusivity constant. The subscript notation denotes partial derivatives, with $u_t$ representing the partial derivative of $u$ with respect to time, and $u_{xx}$ representing the second partial derivative of $u$ with respect to space.
+It is usually presented with initial and boundary conditions, which for the following analysis we will use the following:
+\begin{align*} \label{ic.heat_eqn}
+    u(x,0) &= f(x) \quad \text{for } 0 < x < L \\
+    u(0,t) &= 0 \quad \text{for } t > 0 \\
+    u(L,t) &= 0 \quad \text{for } t > 0
+\end{align*}
+
+The initial condition $u(x,0) = f(x)$ specifies the temperature distribution along the rod at time $t=0$, while the boundary conditions $u(0,t) = 0$ and $u(L,t) = 0$ indicate that the ends of the rod are held at zero temperature for all times $t > 0$. The goal is to find a function $u(x,t)$ that satisfies the heat equation \eqref{eqn.heat_eqn} along with the given initial and boundary conditions. This problem can be solved using various methods, including separation of variables, Fourier series, and numerical techniques such as finite difference methods.
+
+\subsection{Separation of Variables}\label{subsec.separation_of_variables}
+This is a common technique for solving partial differential equations and the process will be shown for the heat equation \eqref{eqn.heat_eqn}. The idea is to assume that the solution can be written as a product of two functions, one depending only on $x$ and the other depending only on $t$. Suppose:
+\[
+    u(x,t) = X(x)T(t)
+\]
+where $X(x)$ is a function of $x$ alone and $T(t)$ is a function of $t$ alone. We make no claim about what $X$ and $T$ are yet. Let's transform the heat equation into separation form:
+\[
+\begin{cases}
+    u_t = X(x)T'(t) \\
+    u_x = X'(x)T(t) \\
+    u_{xx} = X''(x)T(t)
+\end{cases}
+\implies X(x)T'(t) = a^2 X''(x)T(t)
+\]
+This doesn't look like it's helpful yet, but we can rearrange it to get:
+\[
+\frac{T'(t)}{a^2 T(t)} = \frac{X''(x)}{X(x)}
+\]
+so now each side only has one variable. Since our equation must hold for all $x$ and $t$, we can set both sides equal to a constant, say $k$: 
+\[
+\frac{T'(t)}{a^2 T(t)} = \frac{X''(x)}{X(x)} = k
+\]
+This gives us two ordinary differential equations:
+\[
+\begin{cases}
+    T'(t) - a^2 k T(t) = 0 \\
+    X''(x) - k X(x) = 0
+\end{cases}
+\]
+These are much easier to solve. 
+\subsubsection{What can $k$ be?}\label{subsubsec.k_values}
+The value of the constant $k$ at this point is not known. Let's try to refine what $k$ can be. $k$ can be either of the following: $k >0$, $k=0$, or $k<0$. \\
+\textit{Case 1: $k = 0$:}
+In this case, the equation for $X(x)$ becomes:
+\[
+\begin{cases}
+    T'(t) = 0 \\
+    X''(x) = 0
+\end{cases}
+\implies 
+    X(x) = C_1 x + C_2
+\]
+for some constants $C_1$ and $C_2$. Let's check the initial and boundary conditions:
+\[
+u(0,t) = X(0)T(t) = C_2 \cdot T(t) = 0 \\
+\]
+For this to hold for all $t$, we must have $C_2 = 0$. Now we check the other boundary condition:
+\[
+u(L,t) = X(L)T(t) = C_1 L \cdot T(t) = 0
+\]
+For this to hold for all $t$, we must have $C_1 = 0$. Thus, the only solution for $k=0$ is the trivial solution $u(x,t) = 0$ which we are not interested in.\\
+\textit{Case 2: $k > 0$:}
+From ODEs:
+\[
+X''(x) - k X(x) = 0
+\implies 
+X(x) = C_1 e^{\sqrt{k} x} + C_2 e^{-\sqrt{k} x}
+\]
+Check initial and boundary conditions, $u(0,t)=0$:
+\[
+u(0,t) = X(0)T(t) = (C_1 + C_2)T(t) = 0
+\implies C_2 = -C_1 \implies
+X(x) = C_1 (e^{\sqrt{k} x} - e^{-\sqrt{k} x}) 
+\]
+Check second boundary condition, $u(L,t)=0$:
+\[
+u(L,t) = X(L)T(t) = C_1 (e^{\sqrt{k} L} - e^{-\sqrt{k} L}) T(t) = 0
+\]
+Since $e^{\sqrt{k} L} \geq e^{-\sqrt{k} L}$ for $k > 0$, $e^{\sqrt{k} L} - e^{-\sqrt{k} L} \neq 0$, so we must have $C_1 = 0$. Thus, the only solution for $k > 0$ is also the trivial solution $u(x,t) = 0$.\\
+\textit{Case 3: $k < 0$:}
+Let $k = -\lambda^2$ for some $\lambda > 0$. Then the equation for $X(x)$ becomes:
+\[
+X''(x) + \lambda^2 X(x) = 0
+\]
+This is a second-order linear homogeneous ODE with constant coefficients. The characteristic equation is:
+\[
+r^2 + \lambda^2 = 0
+\implies r = \pm i \lambda
+\]
+Thus, the general solution for $X(x)$ is:
+\[
+X(x) = C_1 \cos(\lambda x) + C_2 \sin(\lambda x)
+\]
+Checking the boundary condition $u(0,t) = 0$:
+\[
+u(0,t) = X(0)T(t) = C_1 T(t) = 0
+\implies C_1 = 0 \implies X(x) = C_2 \sin(\lambda x)
+\]
+Now checking the second boundary condition $u(L,t) = 0$:
+\[
+u(L,t) = X(L)T(t) = C_2 \sin(\lambda L) T(t) = 0
+\implies \sin(\lambda L) = 0
+\]
+From the unit circle, $\sin (z) = 0$ when $z = n\pi$ for some integer $n$. Thus, we have:
+\[
+\lambda L = n \pi \implies \lambda = \frac{n \pi}{L}, \quad n \in \NN
+\]
+Thus, the values of $k$ that yield non-trivial solutions are:
+\[
+k_n = -\lambda_n^2 = -\left(\frac{n \pi}{L}\right)^2, \quad n \in \NN
+\]
+And the solution for $X(x)$ is:
+\[
+X_n(x) = \sin\left(\frac{n \pi x}{L}\right), \quad n \in \NN
+\]
+These individual $X_n$ are called the eigenfunctions of the problem, and the corresponding $k_n$ are called the eigenvalues.
+
+\subsubsection{Finding $T(t)$}\label{subsubsec.finding_T}
+\[
+T' - a^2 k T = 0
+\implies T' + a^2 \lambda^2 T = 0
+\]
+This is a first-order linear ODE we can solve via separation:
+\[
+\diff{T}{t} = -a^2 \lambda^2 T
+\implies \frac{1}{T} \diff{T}{t} = -a^2 \lambda^2
+\implies \int \frac{1}{T} dT = -a^2 \lambda^2 \int dt
+\]
+\[
+\implies \ln |T| = -a^2 \lambda^2 t + C
+\implies T(t) = A e^{-a^2 \lambda^2 t}
+\]
+
+\subsection{Constructing the General Solution}\label{subsec.general_solution}
+From the previous sections, we have found that the eigenfunctions of the problem are $X_n(x) = \sin\left(\frac{n \pi x}{L}\right)$ and the corresponding time functions are $T_n(t) = e^{-a^2 \lambda_n^2 t}$. Thus, the product of these gives us a family of solutions to the heat equation:
+\[
+u_n(x,t) = X_n(x) T_n(t) = \sin\left(\frac{n \pi x}{L}\right) e^{-a^2 \left(\frac{n \pi}{L}\right)^2 t}, \quad n \in \NN
+\]
+Combining these solutions, we can construct the general solution to the heat equation as an infinite sum of these eigenfunctions:
+\begin{equation} \label{eqn.heat_eqn_sol}
+    u(x,t) = \sum_{n=1}^\infty b_n \sin\left(\frac{n \pi x}{L}\right) e^{-a^2 \left(\frac{n \pi}{L}\right)^2 t}
+\end{equation}
+Checking the final initial condition:
+\[
+u_n(x,0) = \sin\left(\frac{n \pi x}{L}\right) = f(x)
+\]
+depending on the initial condition $f(x)$, this could be just a matter of choosing the right $n$ to match $f(x)$. But what if $f$ is not a trigonometric function? Can we represent an arbitrary $f$ as a sum of trigonometric functions? Enter, \textbf{Fourier}! This is how we can find the coefficients $b_n$ in the general solution \eqref{eqn.heat_eqn_sol}. We do not have the tools yet to do this, but we can after a brief introduction to Fourier series in the next section.
+
+After the next section we will be able to show that the coefficients $b_n$ can be found by the following formula:
+\[
+b_n = \frac{2}{L} \int_0^L f(x) \sin\left(\frac{n \pi x}{L}\right) dx, \quad n \in \NN
+\]
+
+This now gives us a complete solution to the heat equation \eqref{eqn.heat_eqn} with the given initial and boundary conditions.
+\begin{equation}\label{eqn.heat_eqn_complete_sol}
+    u(x,t) = \sum_{n=1}^\infty \left( \frac{2}{L} \int_0^L f(x) \sin\left(\frac{n \pi x}{L}\right) dx \right) \sin\left(\frac{n \pi x}{L}\right) e^{-a^2 \left(\frac{n \pi}{L}\right)^2 t}
+\end{equation}
